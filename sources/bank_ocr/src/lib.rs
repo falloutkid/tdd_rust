@@ -1,5 +1,3 @@
-use std::result;
-
 const ZERO_PATTERN: [[char; 3]; 3] = [[' ', '_', ' '], ['|', ' ', '|'], ['|', '_', '|']];
 const ONE_PATTERN: [[char; 3]; 3] = [[' ', ' ', ' '], [' ', ' ', '|'], [' ', ' ', '|']];
 const TWO_PATTERN: [[char; 3]; 3] = [[' ', '_', ' '], [' ', '_', '|'], ['|', '_', ' ']];
@@ -38,15 +36,19 @@ fn recognize_account_number(numbers: &str) -> String {
 
 fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
     let mut result: [[char; 3]; 3] = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']];
-    let lines = line.split("\n");
-    let mut lines_char: Vec<Vec<char>> = Vec::new();
-    for line in lines {
-        let mut line_char: Vec<char> = Vec::new();
-        for c in line.chars() {
-            line_char.push(c);
-        }
-        lines_char.push(line_char);
-    }
+    let lines_char: Vec<Vec<char>> = line
+        .lines()
+        .map(|l| l.chars().collect::<Vec<char>>())
+        .collect::<Vec<Vec<char>>>();
+    // let lines = line.split("\n");
+    // let mut lines_char: Vec<Vec<char>> = Vec::new();
+    // for line in lines {
+    //     let mut line_char: Vec<char> = Vec::new();
+    //     for c in line.chars() {
+    //         line_char.push(c);
+    //     }
+    //     lines_char.push(line_char);
+    // }
 
     for i in 0..3 {
         for j in 0..3 {
@@ -58,14 +60,25 @@ fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
 }
 
 fn is_valid_account_number(account_number: &str) -> bool {
-    let mut account_number: Vec<u8> = account_number.bytes().collect();
-    account_number.reverse();
     let mut check_sum = 0;
-    let mut base = '0' as i32;
-    for (i, v) in account_number.iter().enumerate() {
-        check_sum += (*v as i32 - base) * (i as i32 + 1);
+    let base = '0' as i32;
+    for (i, v) in account_number.bytes().rev().enumerate() {
+        check_sum += (v as i32 - base) * (i as i32 + 1);
     }
     check_sum % 11 == 0
+}
+
+fn print_account_number(account_number: &str) -> String {
+    let mut account_number = account_number.to_string();
+    if account_number.contains('?') {
+        account_number.push_str(" ILL");
+        account_number
+    } else if is_valid_account_number(&account_number) == false {
+        account_number.push_str(" ERR");
+        account_number
+    } else {
+        account_number
+    }
 }
 
 #[cfg(test)]
@@ -198,5 +211,25 @@ mod tests_check_sum {
     #[test]
     fn test_check_sum_false() {
         assert!(!is_valid_account_number("123456780"));
+    }
+}
+
+#[cfg(test)]
+mod tests_print_result {
+    use super::*;
+
+    #[test]
+    fn test_print_account_number_true() {
+        assert_eq!("457508000", print_account_number("457508000"));
+    }
+
+    #[test]
+    fn test_print_account_number_invalid_checksum() {
+        assert_eq!("664371495 ERR", print_account_number("664371495"));
+    }
+
+    #[test]
+    fn test_print_account_number_invalid_number() {
+        assert_eq!("86110??36 ILL", print_account_number("86110??36"));
     }
 }
