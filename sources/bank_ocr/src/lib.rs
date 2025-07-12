@@ -14,9 +14,26 @@ const NINE_PATTERN: [[char; 3]; 3] = [[' ', '_', ' '], ['|', '_', '|'], [' ', '_
 fn recognize_digit(pattern: [[char; 3]; 3]) -> char {
     match pattern {
         ZERO_PATTERN => '0',
-        // 他の数字のパターンもここに追加していくイメージ
+        ONE_PATTERN => '1',
+        TWO_PATTERN => '2',
+        THREE_PATTERN => '3',
+        FOUR_PATTERN => '4',
+        FIVE_PATTERN => '5',
+        SIX_PATTERN => '6',
+        SEVEN_PATTERN => '7',
+        EIGHT_PATTERN => '8',
+        NINE_PATTERN => '9',
         _ => '?', // 認識できない場合は '?' を返すとか
     }
+}
+
+fn recognize_account_number(numbers: &str) -> String {
+    let mut result = String::new();
+    for i in 0..9 {
+        let pattern = cat_number(numbers, i);
+        result.push(recognize_digit(pattern));
+    }
+    result
 }
 
 fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
@@ -41,7 +58,7 @@ fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
 }
 
 #[cfg(test)]
-mod tests {
+mod tests_common {
     use super::*;
 
     #[test]
@@ -65,9 +82,85 @@ mod tests {
         let nine = cat_number(&numbers, 8);
         assert_eq!(nine, NINE_PATTERN);
     }
+}
+
+#[cfg(test)]
+mod tests_recognize_number {
+    use super::*;
 
     #[test]
     fn test_recognize_digit_zero() {
         assert_eq!(recognize_digit(ZERO_PATTERN), '0');
+    }
+    #[test]
+    fn test_recognize_digit_one() {
+        assert_eq!(recognize_digit(ONE_PATTERN), '1');
+    }
+    #[test]
+    fn test_recognize_digit_two() {
+        assert_eq!(recognize_digit(TWO_PATTERN), '2');
+    }
+    #[test]
+    fn test_recognize_digit_three() {
+        assert_eq!(recognize_digit(THREE_PATTERN), '3');
+    }
+    #[test]
+    fn test_recognize_digit_four() {
+        assert_eq!(recognize_digit(FOUR_PATTERN), '4');
+    }
+    #[test]
+    fn test_recognize_digit_five() {
+        assert_eq!(recognize_digit(FIVE_PATTERN), '5');
+    }
+    #[test]
+    fn test_recognize_digit_six() {
+        assert_eq!(recognize_digit(SIX_PATTERN), '6');
+    }
+    #[test]
+    fn test_recognize_digit_seven() {
+        assert_eq!(recognize_digit(SEVEN_PATTERN), '7');
+    }
+    #[test]
+    fn test_recognize_digit_eight() {
+        assert_eq!(recognize_digit(EIGHT_PATTERN), '8');
+    }
+    #[test]
+    fn test_recognize_digit_nine() {
+        assert_eq!(recognize_digit(NINE_PATTERN), '9');
+    }
+}
+
+#[cfg(test)]
+mod tests_recognize_account_number {
+    use super::*;
+
+    #[test]
+    fn test_parse_account_number_zero() {
+        let zero_account_number_pattern = " _  _  _  _  _  _  _  _  _ 
+| || || || || || || || || |
+|_||_||_||_||_||_||_||_||_|
+                           "; // 最後の行は空白だよ
+
+        assert_eq!("000000000", recognize_account_number(&zero_account_number_pattern));
+    }
+
+        #[test]
+    fn test_parse_account_number_11111111() {
+        let zero_account_number_pattern = "                           
+  |  |  |  |  |  |  |  |  |
+  |  |  |  |  |  |  |  |  |
+                           "; // 最後の行は空白だよ
+
+        assert_eq!("111111111", recognize_account_number(&zero_account_number_pattern));
+    }
+
+        #[test]
+    fn test_parse_account_number_123456789() {
+        let zero_account_number_pattern = "    _  _     _  _  _  _  _ 
+  | _| _||_||_ |_   ||_||_|
+  ||_  _|  | _||_|  ||_| _|
+                           "; // 最後の行は空白だよ
+
+        assert_eq!("123456789", recognize_account_number(&zero_account_number_pattern));
     }
 }
