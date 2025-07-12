@@ -57,6 +57,17 @@ fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
     result
 }
 
+fn is_valid_account_number(account_number: &str) -> bool {
+    let mut account_number: Vec<u8> = account_number.bytes().collect();
+    account_number.reverse();
+    let mut check_sum = 0;
+    let mut base = '0' as i32;
+    for (i, v) in account_number.iter().enumerate() {
+        check_sum += (*v as i32 - base) * (i as i32 + 1);
+    }
+    check_sum % 11 == 0
+}
+
 #[cfg(test)]
 mod tests_common {
     use super::*;
@@ -141,26 +152,51 @@ mod tests_recognize_account_number {
 |_||_||_||_||_||_||_||_||_|
                            "; // 最後の行は空白だよ
 
-        assert_eq!("000000000", recognize_account_number(&zero_account_number_pattern));
+        assert_eq!(
+            "000000000",
+            recognize_account_number(&zero_account_number_pattern)
+        );
     }
 
-        #[test]
+    #[test]
     fn test_parse_account_number_11111111() {
         let zero_account_number_pattern = "                           
   |  |  |  |  |  |  |  |  |
   |  |  |  |  |  |  |  |  |
                            "; // 最後の行は空白だよ
 
-        assert_eq!("111111111", recognize_account_number(&zero_account_number_pattern));
+        assert_eq!(
+            "111111111",
+            recognize_account_number(&zero_account_number_pattern)
+        );
     }
 
-        #[test]
+    #[test]
     fn test_parse_account_number_123456789() {
         let zero_account_number_pattern = "    _  _     _  _  _  _  _ 
   | _| _||_||_ |_   ||_||_|
   ||_  _|  | _||_|  ||_| _|
                            "; // 最後の行は空白だよ
 
-        assert_eq!("123456789", recognize_account_number(&zero_account_number_pattern));
+        assert_eq!(
+            "123456789",
+            recognize_account_number(&zero_account_number_pattern)
+        );
+    }
+}
+
+#[cfg(test)]
+mod tests_check_sum {
+    use super::*;
+
+    #[test]
+    fn test_check_sum_true() {
+        assert!(is_valid_account_number("123456789"));
+        assert!(is_valid_account_number("345882865"));
+    }
+
+    #[test]
+    fn test_check_sum_false() {
+        assert!(!is_valid_account_number("123456780"));
     }
 }
