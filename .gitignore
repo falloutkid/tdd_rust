@@ -23,3 +23,6 @@ target
 # Gemini CLI Settings
 GEMINI.md
 .env
+
+# not tracking file
+Template.adoc

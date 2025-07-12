@@ -1,2 +1,2 @@
 [workspace]
-members = ["fizzbuzz"]
+members = [ "bank_ocr","fizzbuzz"]
