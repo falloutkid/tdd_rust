@@ -80,46 +80,25 @@ mod tests_common {
 #[cfg(test)]
 mod tests_recognize_number {
     use super::*;
-    
+
     #[test]
-    fn test_recognize_digit_zero() {
-        assert_eq!(recognize_digit(ZERO_PATTERN), '0');
-    }
-    #[test]
-    fn test_recognize_digit_one() {
-        assert_eq!(recognize_digit(ONE_PATTERN), '1');
-    }
-    #[test]
-    fn test_recognize_digit_two() {
-        assert_eq!(recognize_digit(TWO_PATTERN), '2');
-    }
-    #[test]
-    fn test_recognize_digit_three() {
-        assert_eq!(recognize_digit(THREE_PATTERN), '3');
-    }
-    #[test]
-    fn test_recognize_digit_four() {
-        assert_eq!(recognize_digit(FOUR_PATTERN), '4');
-    }
-    #[test]
-    fn test_recognize_digit_five() {
-        assert_eq!(recognize_digit(FIVE_PATTERN), '5');
-    }
-    #[test]
-    fn test_recognize_digit_six() {
-        assert_eq!(recognize_digit(SIX_PATTERN), '6');
-    }
-    #[test]
-    fn test_recognize_digit_seven() {
-        assert_eq!(recognize_digit(SEVEN_PATTERN), '7');
-    }
-    #[test]
-    fn test_recognize_digit_eight() {
-        assert_eq!(recognize_digit(EIGHT_PATTERN), '8');
-    }
-    #[test]
-    fn test_recognize_digit_nine() {
-        assert_eq!(recognize_digit(NINE_PATTERN), '9');
+    fn test_recognize_all_digits() {
+        let test_cases = [
+            (ZERO_PATTERN, '0'),
+            (ONE_PATTERN, '1'),
+            (TWO_PATTERN, '2'),
+            (THREE_PATTERN, '3'),
+            (FOUR_PATTERN, '4'),
+            (FIVE_PATTERN, '5'),
+            (SIX_PATTERN, '6'),
+            (SEVEN_PATTERN, '7'),
+            (EIGHT_PATTERN, '8'),
+            (NINE_PATTERN, '9'),
+        ];
+
+        for (pattern, expected) in test_cases.iter() {
+            assert_eq!(recognize_digit(*pattern), *expected);
+        }
     }
 }
 
@@ -155,5 +134,17 @@ mod tests_recognize_account_number {
             "123456789",
             recognize_account_number(&zero_account_number_pattern)
         );
+    }
+}
+
+#[cfg(test)]
+mod tests_one_off_patterns {
+    use super::*;
+    #[test]
+    fn test_generate_one_off_patterns_for_zero() {
+        let zero_pattern = ZERO_PATTERN;
+        let one_off_patterns = generate_one_off_patterns(zero_pattern);
+        // '0' から1文字変更で '8' になることを確認
+        assert!(one_off_patterns.contains(&EIGHT_PATTERN));
     }
 }
