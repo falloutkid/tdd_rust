@@ -50,6 +50,40 @@ pub fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
     result
 }
 
+pub fn generate_one_off_patterns(pattern: [[char; 3]; 3]) -> Vec<char> {
+    fn diff_count(a: &[[char; 3]; 3], b: &[[char; 3]; 3]) -> usize {
+        let mut count = 0;
+        for c in 0..3 {
+            for r in 0..3 {
+                if a[c][r] != b[c][r] {
+                    count += 1;
+                }
+            }
+        }
+        count
+    }
+    let numbers = [
+        ZERO_PATTERN,
+        ONE_PATTERN,
+        TWO_PATTERN,
+        THREE_PATTERN,
+        FOUR_PATTERN,
+        FIVE_PATTERN,
+        SIX_PATTERN,
+        SEVEN_PATTERN,
+        EIGHT_PATTERN,
+        NINE_PATTERN,
+    ];
+    let mut result = Vec::new();
+
+    for (index, number) in numbers.iter().enumerate() {
+        if diff_count(&pattern, &number) <= 1 {
+            result.push((index as u8 + b'0' as u8) as char);
+        }
+    }
+    result
+}
+
 #[cfg(test)]
 mod tests_common {
     use crate::recognizer::*;
@@ -140,11 +174,33 @@ mod tests_recognize_account_number {
 #[cfg(test)]
 mod tests_one_off_patterns {
     use super::*;
+
     #[test]
-    fn test_generate_one_off_patterns_for_zero() {
+    fn test_generate_one_off_patterns() {
+        // Test Case 1: '0' -> '8' (add char)
         let zero_pattern = ZERO_PATTERN;
-        let one_off_patterns = generate_one_off_patterns(zero_pattern);
-        // '0' から1文字変更で '8' になることを確認
-        assert!(one_off_patterns.contains(&EIGHT_PATTERN));
+        let one_off_patterns_from_zero = generate_one_off_patterns(zero_pattern);
+        assert!(one_off_patterns_from_zero.contains(&('8' as char)));
+
+        // Test Case 2: '8' -> '0' (remove char)
+        let eight_pattern = EIGHT_PATTERN;
+        let one_off_patterns_from_eight = generate_one_off_patterns(eight_pattern);
+        assert!(one_off_patterns_from_eight.contains(&('0' as char)));
+
+        // Test Case 3: '1' -> '7' (add char)
+        let one_pattern = ONE_PATTERN;
+        let one_off_patterns_from_one = generate_one_off_patterns(one_pattern);
+        assert!(one_off_patterns_from_one.contains(&('7' as char)));
+
+        // Test Case 4: '7' -> '1' (remove char)
+        let seven_pattern = SEVEN_PATTERN;
+        let one_off_patterns_from_seven = generate_one_off_patterns(seven_pattern);
+        assert!(one_off_patterns_from_seven.contains(&('1' as char)));
+
+        // Test Case 5: '5' -> '6' and '9' (multiple candidates)
+        let five_pattern = FIVE_PATTERN;
+        let one_off_patterns_from_five = generate_one_off_patterns(five_pattern);
+        assert!(one_off_patterns_from_five.contains(&('6' as char)));
+        assert!(one_off_patterns_from_five.contains(&('9' as char)));
     }
 }
