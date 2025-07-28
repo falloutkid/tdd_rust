@@ -11,12 +11,6 @@ pub fn print_account_number(account_number: &str) -> String {
     }
 }
 
-// 新しい関数をここに実装するよ
-pub fn correct_account_number(account_number: &str) -> Vec<String> {
-    // 仮の実装。後でちゃんと実装するね！
-    vec![account_number.to_string()]
-}
-
 #[cfg(test)]
 mod tests_print_result {
     use super::*;
@@ -36,14 +30,5 @@ mod tests_print_result {
     #[test]
     fn test_print_account_number_invalid_number() {
         assert_eq!("86110??36 ILL", print_account_number("86110??36"));
-    }
-
-    #[test]
-    fn test_correct_account_number_single_candidate() {
-        // 123456780 は ERR になるはず。0 を 9 に変えると 123456789 で有効になる。
-        let account_number = "123456780";
-        let result = correct_account_number(account_number);
-
-        assert!(result.contains(&"123456789".to_string()));
     }
 }

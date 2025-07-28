@@ -1,3 +1,5 @@
+use std::result;
+
 pub const ZERO_PATTERN: [[char; 3]; 3] = [[' ', '_', ' '], ['|', ' ', '|'], ['|', '_', '|']];
 pub const ONE_PATTERN: [[char; 3]; 3] = [[' ', ' ', ' '], [' ', ' ', '|'], [' ', ' ', '|']];
 pub const TWO_PATTERN: [[char; 3]; 3] = [[' ', '_', ' '], [' ', '_', '|'], ['|', '_', ' ']];
@@ -25,6 +27,22 @@ pub fn recognize_digit(pattern: [[char; 3]; 3]) -> char {
     }
 }
 
+pub fn get_digit_pattern(digit: char) -> [[char; 3]; 3] {
+    match digit {
+        '0' => ZERO_PATTERN,
+        '1' => ONE_PATTERN,
+        '2' => TWO_PATTERN,
+        '3' => THREE_PATTERN,
+        '4' => FOUR_PATTERN,
+        '5' => FIVE_PATTERN,
+        '6' => SIX_PATTERN,
+        '7' => SEVEN_PATTERN,
+        '8' => EIGHT_PATTERN,
+        '9' => NINE_PATTERN,
+        _ => [[' '; 3]; 3], // Should not happen with valid digits, but handle it
+    }
+}
+
 pub fn recognize_account_number(numbers: &str) -> String {
     let mut result = String::new();
     for i in 0..9 {
@@ -32,6 +50,28 @@ pub fn recognize_account_number(numbers: &str) -> String {
         result.push(recognize_digit(pattern));
     }
     result
+}
+
+// 新しい関数をここに実装するよ
+pub fn correct_account_number(original_number_pattern: &str, account_number: &str) -> Vec<String> {
+    let mut correct_number_list = Vec::new();
+    let original_account_chars: Vec<char> = account_number.chars().collect();
+
+    for i in 0..9 {
+        let target_pattern = cat_number(original_number_pattern, i);
+        let one_off_digits = generate_one_off_patterns(target_pattern);
+
+        for &candidate_digit_char in one_off_digits.iter() {
+            let mut temp_chars = original_account_chars.clone();
+            temp_chars[i] = candidate_digit_char;
+            let candidate_string: String = temp_chars.into_iter().collect();
+
+            if crate::validator::is_valid_account_number(&candidate_string) {
+                correct_number_list.push(candidate_string);
+            }
+        }
+    }
+    correct_number_list
 }
 
 pub fn cat_number(line: &str, index: usize) -> [[char; 3]; 3] {
@@ -202,5 +242,25 @@ mod tests_one_off_patterns {
         let one_off_patterns_from_five = generate_one_off_patterns(five_pattern);
         assert!(one_off_patterns_from_five.contains(&('6' as char)));
         assert!(one_off_patterns_from_five.contains(&('9' as char)));
+    }
+}
+
+#[cfg(test)]
+mod tests_correct_account_number_patterns {
+    use super::*;
+
+    #[test]
+    fn test_correct_account_number_single_candidate() {
+        // 123456780 は ERR になるはず。0 を 9 に変えると 123456789 で有効になる。
+        let original_account_number_pattern = "    _  _     _  _  _  _  _ 
+ _| _| _||_||_ |_   ||_||_|
+  ||_  _|  | _||_|  ||_| _|
+                           ";
+        let account_number = "490067715";
+        let result = correct_account_number(original_account_number_pattern, account_number);
+
+        println!("{:?}", result);
+
+        assert!(result.contains(&"490067719".to_string()));
     }
 }
