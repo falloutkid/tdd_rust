@@ -1,0 +1,44 @@
+= Anagram
+:toc:
+:sectnums:
+:toclevels: 5
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:stem:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:source-highlighter: highlightjs
+:figure-caption: Figure 
+:table-caption: Table 
+:imagesdir: ./image
+
+https://codingdojo.org/kata/Anagram//[Anagram]
+
+.アナグラム
+****
+アナグラムは、ある言葉や文の中の文字の並べ替えによって、別の意味を持つ言葉や文を作る言葉遊びです。
+
+たとえば、「いらすと」という言葉の文字を並べ替えると、「すらいと」や「すとらい」など、まったく違う言葉が生まれます。
+****
+
+== 問題
+
+=== ステップ1
+
+* 文字列 "documenting" のすべての2単語アナグラムを生成するプログラムを作成してください。
+* コードの可読性に焦点を当て、一切のドキュメンテーションを含めてはなりません。
+* 誰もが簡単に読んで理解できるコードを作成することが目標です。
+
+使用できる https://codingdojo.org/kata/word_list.txt[単語リスト] はこちらです。
+
+=== ステップ2
+
+ソリューションのパフォーマンスを改善してみてください。ただし、高速化が可読性に影響を与える可能性があることを念頭に置いてください。
+
+引き続き、可読性を最優先してください
+
