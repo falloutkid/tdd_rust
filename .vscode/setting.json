@@ -1,0 +1,13 @@
+{
+  "rust-analyzer.linkedProjects": [
+    "sources/Cargo.toml",
+    "sources/anagram/Cargo.toml",
+    "sources/bank_ocr/Cargo.toml",
+    "sources/fizzbuzz/Cargo.toml",
+    "sources/semantic_version/Cargo.toml"
+  ],
+  "rust-analyzer.showUnlinkedFileNotification": false,
+  "rust-analyzer.testExplorer": true,
+  "rustTestExplorer.rootCargoManifestFilePath": "source/Cargo.toml"
+  // "asciidoc.antora.enableAntoraSupport": true
+}
