@@ -17,7 +17,7 @@ endif::[]
 :table-caption: Table 
 :imagesdir: ./image
 
-https://codingdojo.org/kata/Anagram//[Anagram]
+https://codingdojo.org/kata/Anagram/[Anagram]
 
 .アナグラム
 ****

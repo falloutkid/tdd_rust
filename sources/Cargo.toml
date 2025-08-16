@@ -1,2 +1,2 @@
 [workspace]
-members = [ "anagram", "bank_ocr", "fizzbuzz"]
+members = [ "anagram", "bank_ocr", "fizzbuzz", "semantic_version"]
