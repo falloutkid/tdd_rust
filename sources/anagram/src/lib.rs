@@ -38,12 +38,15 @@ fn is_anagram(s1: &str, s2: &str) -> bool {
 }
 
 fn anagram(word: &str, word_list: &HashMap<String, Vec<String>>) -> Vec<String> {
-    let mut word = word.to_lowercase().chars().collect::<Vec<char>>();
-    word.sort();
-    let word: String = word.iter().collect();
-    if word_list.contains_key(&word) {
-        println!("Find {word}");
-        return word_list[&word].clone();
+    use std::collections::HashSet;
+    let mut target = word.to_lowercase().chars().collect::<Vec<char>>();
+    target.sort();
+    let target: String = target.iter().collect();
+    if word_list.contains_key(&target) {
+        println!("Find {target}");
+        let mut result:HashSet<String> = word_list[&target].clone().into_iter().collect();
+        result.remove(word);
+        return result.into_iter().collect();
     } else {
         Vec::new()
     }
@@ -73,5 +76,30 @@ mod tests {
         println!("{:?}", anagrams);
         let expected = vec!["kilo"];
         assert_eq!(anagrams, expected);
+    }
+
+    #[test]
+    fn test_anagram_two_word_found() {
+        let word_list = read_word_list("src/word_list.txt").unwrap();
+        let anagrams = anagram("listne", &word_list);
+        println!("{:?}", anagrams);
+        assert!(anagrams.len() == 2);
+    }
+
+    #[test]
+    fn test_anagram_one_word_found() {
+        let word_list = read_word_list("src/word_list.txt").unwrap();
+        let anagrams = anagram("listen", &word_list);
+        println!("{:?}", anagrams);
+        assert!(anagrams.len() == 1);
+    }
+
+    #[test]
+    fn test_anagram_not_found() {
+        let word_list = read_word_list("src/word_list.txt").unwrap();
+        println!("{:?}", word_list);
+        let anagrams = anagram("humori", &word_list);
+        println!("{:?}", anagrams);
+        assert!(anagrams.is_empty());
     }
 }
