@@ -7,6 +7,12 @@ name = "anagram"
 version = "0.1.0"
 
 [[package]]
+name = "anyhow"
+version = "1.0.99"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
+
+[[package]]
 name = "bank_ocr"
 version = "0.1.0"
 
@@ -17,3 +23,10 @@ version = "0.1.0"
 [[package]]
 name = "semantic_version"
 version = "0.1.0"
+
+[[package]]
+name = "vending_machine"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+]

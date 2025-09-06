@@ -1,2 +1,3 @@
 [workspace]
-members = [ "anagram", "bank_ocr", "fizzbuzz", "semantic_version"]
+resolver = "3"
+members = [ "anagram", "bank_ocr", "fizzbuzz", "semantic_version", "vending_machine"]
