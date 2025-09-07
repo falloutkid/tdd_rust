@@ -105,8 +105,7 @@ impl VendingMachine {
     /// Returns `Ok("Coke")` if a Cola is successfully dispensed, or an `Err` with an `anyhow` error
     /// if there is insufficient money.
     fn get_cola(&mut self) -> Result<String> {
-        let is_have_one_hundred = if self.deposits.contains_key(&Money::OneHundred) {
-            let one_hundred = self.deposits.get(&Money::OneHundred).unwrap();
+        let is_have_one_hundred = if let Some(one_hundred) = self.deposits.get(&Money::OneHundred) {
             *one_hundred > 0
         } else {
             false
@@ -129,8 +128,7 @@ impl VendingMachine {
     /// Returns `Ok("Oolong Tea")` if Oolong Tea is successfully dispensed, or an `Err` with an `anyhow` error
     /// if there is insufficient money.
     fn get_oolong_tea(&mut self) -> Result<String> {
-        let is_have_one_hundred = if self.deposits.contains_key(&Money::OneHundred) {
-            let one_hundred = self.deposits.get(&Money::OneHundred).unwrap();
+        let is_have_one_hundred = if let Some(one_hundred) = self.deposits.get(&Money::OneHundred) {
             *one_hundred > 0
         } else {
             false
@@ -153,8 +151,7 @@ impl VendingMachine {
     /// Returns `Ok("Redbull")` if Redbull is successfully dispensed, or an `Err` with an `anyhow` error
     /// if there is insufficient money.
     fn get_redbull(&mut self) -> Result<String> {
-        let is_have_one_hundred = if self.deposits.contains_key(&Money::OneHundred) {
-            let one_hundred = self.deposits.get(&Money::OneHundred).unwrap();
+        let is_have_one_hundred = if let Some(one_hundred) = self.deposits.get(&Money::OneHundred) {
             *one_hundred >= 2
         } else {
             false
@@ -170,7 +167,7 @@ impl VendingMachine {
     }
 
     pub fn press_button(&mut self, drink: Drink) -> Result<String> {
-        let result =match drink {
+        let result = match drink {
             Drink::Coke => self.get_cola(),
             Drink::OolongTea => self.get_oolong_tea(),
             Drink::Redbull => self.get_redbull(),
@@ -183,9 +180,9 @@ impl VendingMachine {
         self.buttons
     }
 
+
     fn update_button_status(&mut self) {
-        let status = if self.deposits.contains_key(&Money::OneHundred) {
-            let one_hundred = self.deposits.get(&Money::OneHundred).unwrap();
+        let status = if let Some(one_hundred) = self.deposits.get(&Money::OneHundred) {
             Buttons {
                 coke: if *one_hundred > 0 {
                     ButtonLight::On
